@@ -1,0 +1,56 @@
+@startuml sequence
+!theme plain
+
+title "Sequence Diagram - Proses Peminjaman Buku\n🔄 Urutan Interaksi Sistem"
+
+actor "Mahasiswa" as M
+participant "Sistem Perpustakaan" as S
+participant "Database" as DB
+participant "Sistem Notifikasi" as N
+
+M -> S: Input username & password
+S -> DB: Query cek user
+DB --> S: Data user valid
+S --> M: Login berhasil
+
+M -> S: Request pencarian buku
+S -> DB: Query cari buku
+DB --> S: Daftar buku tersedia
+S --> M: Tampilkan hasil pencarian
+
+M -> S: Pilih buku untuk dipinjam
+S -> DB: Query cek status buku
+DB --> S: Status "TERSEDIA"
+
+S -> DB: Update status buku jadi "DIPINJAM"
+S -> DB: Insert data peminjaman
+DB --> S: Konfirmasi penyimpanan
+
+S -> N: Trigger notifikasi
+N --> M: Kirim konfirmasi peminjaman
+S --> M: Tampilkan "Peminjaman berhasil"
+
+alt Login Gagal
+  M -> S: Input kredensial salah
+  S -> DB: Query cek user
+  DB --> S: Data user tidak valid
+  S --> M: Tampilkan "Login gagal"
+end
+
+alt Buku Tidak Tersedia
+  M -> S: Pilih buku
+  S -> DB: Query cek status buku
+  DB --> S: Status "DIPINJAM"
+  S --> M: Tampilkan "Buku tidak tersedia"
+end
+
+note right of S
+  **Proses Business Logic:**
+  1. Validasi user
+  2. Cek ketersediaan buku
+  3. Update status
+  4. Simpan transaksi
+  5. Kirim notifikasi
+end note
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml Use Case
+!theme plain
+
+title "Use Case Diagram - Sistem Peminjaman Buku\n📚 Perpustakaan Digital"
+
+actor "Mahasiswa" as M
+
+rectangle "Sistem Perpustakaan" {
+  (Login) as UC1
+  (Cari Buku) as UC2
+  (Pinjam Buku) as UC3
+  (Lihat Riwayat) as UC4
+  (Logout) as UC5
+}
+
+' Relasi actor dengan use case
+M --> UC1
+M --> UC2
+M --> UC3
+M --> UC4
+M --> UC5
+
+' Relasi include dan extend
+UC3 .> UC1 : <<include>>
+UC3 .> UC2 : <<extends>>
+
+note right of UC3
+  **Pinjam Buku** memperluas
+  fitur **Cari Buku**
+  dan membutuhkan **Login**
+end note
+
+@enduml

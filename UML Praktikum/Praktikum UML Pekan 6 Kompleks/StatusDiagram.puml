@@ -1,0 +1,31 @@
+@startuml Status Buku
+!theme plain
+
+title "State Diagram - Status Buku\n📊 Lifecycle Management"
+
+[*] -> Tersedia : Buku ditambahkan
+
+state Tersedia : Buku siap dipinjam\nStatus: TERSEDIA
+
+Tersedia -> Dipinjam : Mahasiswa pinjam
+state Dipinjam : Buku sedang dipinjam\nTanggal: tgl_pinjam → tgl_kembali
+
+Dipinjam -> Tersedia : Buku dikembalikan
+Dipinjam -> Terlambat : Lewat tgl_kembali
+state Terlambat : Peminjaman terlambat\nPerhitungan denda
+
+Terlambat -> Tersedia : Buku dikembalikan\n+ bayar denda
+Tersedia -> [*] : Buku diarsipkan
+
+note right of Tersedia
+  **Status Normal:**
+  Tersedia ↔ Dipinjam
+end note
+
+note right of Terlambat
+  **Status Khusus:**
+  Butuh penanganan denda
+  dan peringatan
+end note
+
+@enduml

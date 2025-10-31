@@ -1,0 +1,20 @@
+@startuml sequence
+actor User
+participant "Sistem" as S
+participant "Database" as DB
+
+User -> S: Login(username, password)
+S -> DB: Verifikasi data login
+DB --> S: Status Login
+S --> User: Login berhasil
+
+User -> S: Cari Buku(judul)
+S -> DB: Ambil data buku
+DB --> S: Data buku
+S --> User: Tampilkan hasil pencarian
+
+User -> S: Pinjam Buku(id_buku)
+S -> DB: Update status buku
+DB --> S: Konfirmasi peminjaman
+S --> User: Peminjaman berhasil
+@enduml

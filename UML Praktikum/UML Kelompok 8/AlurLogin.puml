@@ -1,0 +1,36 @@
+@startuml Alur Login
+!theme plain
+
+title "Alur Login dengan Email Kampus\n🔐 Autentikasi Terpusat"
+
+start
+
+:Mahasiswa/Dosen buka platform;
+:Buka halaman login;
+:Masukkan email kampus;
+
+if (Email valid?) then (Ya)
+  :Kirim kode OTP;
+  :Input kode OTP;
+  
+  if (OTP benar?) then (Ya)
+    if (User pertama kali?) then (Ya)
+      :Buat profil baru;
+      :Setup preferensi;
+    else (Tidak)
+      :Ambil data profil;
+    endif
+    
+    :Tampilkan dashboard;
+    stop
+  else (Tidak)
+    :Tampilkan error OTP;
+  endif
+  
+else (Tidak)
+  :Tampilkan "Email kampus tidak valid";
+endif
+
+:Kembali ke halaman login;
+
+@enduml

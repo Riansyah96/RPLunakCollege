@@ -1,0 +1,19 @@
+@startuml activity
+start
+
+:Login ke sistem;
+if (Login berhasil) then (ya)
+    :Cari Buku;
+    :Pilih Buku yang ingin dipinjam;
+    if (Buku tersedia?) then (ya)
+        :Konfirmasi peminjaman;
+        :Simpan data peminjaman;
+        :Tampilkan pesan sukses;
+    else (tidak)
+        :Tampilkan pesan 'buku tidak tersedia';
+    endif
+else (tidak)
+    :Tampilkan pesan eror login;
+endif
+stop
+@enduml   

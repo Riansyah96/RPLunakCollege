@@ -1,0 +1,140 @@
+@startuml Sistem Lengkap
+!theme vibrant
+
+title "Class Diagram - NF Student Hub\n🏛️ Arsitektur Smart Campus Platform"
+
+' ============ CORE ENTITIES ============
+class User {
+  - userId: String
+  - email: String
+  - password: String
+  - role: String
+  - status: String
+  + login(): Boolean
+  + logout(): Boolean
+  + getProfile(): UserProfile
+}
+
+class Mahasiswa {
+  - nim: String
+  - jurusan: String
+  - semester: Integer
+  - statusUKT: String
+  + bayarUKT(): Boolean
+  + lihatInformasi(): List<Informasi>
+  + chatDosen(): Boolean
+}
+
+class Dosen {
+  - nid: String
+  - mataKuliah: String[]
+  - department: String
+  + balasChat(): Boolean
+  + lihatJadwal(): List<Jadwal>
+}
+
+class Admin {
+  - adminId: String
+  - privileges: String[]
+  + monitorSistem(): Report
+  + kelolaUser(): Boolean
+  + updateInformasi(): Boolean
+}
+
+' ============ FEATURE CLASSES ============
+class Chat {
+  - chatId: String
+  - senderId: String
+  - receiverId: String
+  - message: String
+  - timestamp: Date
+  - isEncrypted: Boolean
+  - status: String
+  + kirimPesan(): Boolean
+  + bacaPesan(): List<Chat>
+  + encryptMessage(): String
+}
+
+class Informasi {
+  - infoId: String
+  - title: String
+  - content: String
+  - category: String
+  - targetAudience: String[]
+  - publishDate: Date
+  - expiryDate: Date
+  - priority: String
+  + publish(): Boolean
+  + getByCategory(): List<Informasi>
+  + notifyUsers(): Boolean
+}
+
+class Pembayaran {
+  - paymentId: String
+  - studentId: String
+  - amount: Double
+  - status: String
+  - dueDate: Date
+  - paymentDate: Date
+  - method: String
+  + prosesPembayaran(): Boolean
+  + generateInvoice(): String
+  + updateStatus(): Boolean
+}
+
+class Notifikasi {
+  - notifId: String
+  - userId: String
+  - message: String
+  - type: String
+  - isRead: Boolean
+  - createdDate: Date
+  + sendNotification(): Boolean
+  + markAsRead(): Boolean
+  + getUnread(): List<Notifikasi>
+}
+
+' ============ RELATIONSHIPS ============
+User <|-- Mahasiswa
+User <|-- Dosen
+User <|-- Admin
+
+Mahasiswa "1" -- "*" Chat : mengirim >
+Dosen "1" -- "*" Chat : menerima >
+Mahasiswa "1" -- "*" Pembayaran : melakukan >
+Mahasiswa "1" -- "*" Notifikasi : menerima >
+Admin "1" -- "*" Informasi : mengelola >
+Informasi "1" -- "*" Notifikasi : memicu >
+
+' ============ NOTES & EXPLANATIONS ============
+note top of User
+  🔐 **Authentication Core**
+  - Login dengan email kampus
+  - Role-based access control
+  - Centralized user management
+end note
+
+note right of Chat
+  💬 **Secure Communication**
+  - End-to-end encryption
+  - Real-time messaging
+  - Academic archive (optional)
+end note
+
+note left of Informasi
+  📢 **Information Hub**
+  - Centralized information
+  - Categorized content
+  - Targeted audience
+  - Auto-notification
+end note
+
+note bottom of Pembayaran
+  💰 **Integrated Payment**
+  - UKT payment processing
+  - Multiple payment methods
+  - Status tracking
+  - Invoice generation
+end note
+
+@enduml

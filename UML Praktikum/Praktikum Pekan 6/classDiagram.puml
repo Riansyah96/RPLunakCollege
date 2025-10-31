@@ -1,0 +1,21 @@
+@startuml classDiagram
+class User {
+    - id_user :int
+    - nama : string
+    - nim : string
+    - password : string
+    + login()
+    + caribuku()
+    + pinjambuku()
+}
+
+class Buku {
+    - id_buku : int
+    - judul : string
+    - penulis : string
+    - status : string
+    + tampilkanInfo()
+}
+
+User "1" --> "0.." Buku : pinjam
+@enduml 

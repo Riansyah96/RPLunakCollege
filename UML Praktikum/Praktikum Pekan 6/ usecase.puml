@@ -1,0 +1,5 @@
+@startuml usecase
+
+    Riansyah -> Arief : Hello Word!
+
+@enduml 

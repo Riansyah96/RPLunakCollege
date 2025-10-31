@@ -1,0 +1,40 @@
+@startuml activity
+!theme plain
+
+title "Activity Diagram - Proses Peminjaman Buku\n🔄 Alur Peminjaman"
+
+start
+
+:Mahasiswa membuka sistem;
+:Login ke sistem;
+
+if (Login berhasil?) then (Ya)
+  :Masuk ke dashboard;
+  :Cari buku yang diinginkan;
+  
+  if (Buku ditemukan?) then (Ya)
+    :Pilih buku;
+    :Cek status buku;
+    
+    if (Buku tersedia?) then (Ya)
+      :Proses peminjaman;
+      :Simpan data peminjaman;
+      :Update status buku;
+      :Tampilkan konfirmasi sukses;
+      stop
+    else (Tidak tersedia)
+      :Tampilkan "Buku sedang dipinjam";
+      :Kembali ke pencarian;
+    endif
+    
+  else (Tidak ditemukan)
+    :Tampilkan "Buku tidak ditemukan";
+    :Kembali ke pencarian;
+  endif
+  
+else (Tidak)
+  :Tampilkan pesan error login;
+  :Kembali ke halaman login;
+endif
+
+@enduml

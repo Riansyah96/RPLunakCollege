@@ -1,0 +1,108 @@
+@startuml Sequence Chat
+!theme vibrant
+
+title "Sequence Diagram - NF Student Hub\n🔄 Interaksi Real-time antar Komponen"
+
+actor "Mahasiswa" as M
+participant "Web Frontend" as UI
+participant "Auth Service" as Auth
+participant "Chat Service" as Chat
+participant "Info Service" as Info
+participant "Payment Service" as Pay
+participant "Notification Service" as Notif
+participant "Database" as DB
+participant "External APIs" as Ext
+actor "Dosen" as D
+
+' ============ LOGIN SEQUENCE ============
+M -> UI: Akses NF Student Hub
+UI -> Auth: Request login page
+Auth --> UI: Tampilkan form login
+M -> UI: Input email & password
+UI -> Auth: Submit credentials
+Auth -> DB: Validate user data
+DB --> Auth: User valid + role
+Auth -> UI: Login success + token
+UI --> M: Redirect ke dashboard
+
+' ============ DASHBOARD LOADING ============
+M -> UI: Request dashboard
+UI -> Info: Get personalized info
+Info -> DB: Query info by user profile
+DB --> Info: Filtered information
+Info -> UI: Return info data
+UI -> Notif: Get unread notifications
+Notif -> DB: Query user notifications
+DB --> Notif: Notification list
+Notif --> UI: Unread notifications
+UI --> M: Render personalized dashboard
+
+' ============ REAL-TIME CHAT SEQUENCE ============
+M -> UI: Buka chat interface
+UI -> Chat: Load chat history
+Chat -> DB: Get encrypted messages
+DB --> Chat: Message data
+Chat --> UI: Decrypted chat history
+M -> UI: Ketik pesan baru
+UI -> Chat: Send encrypted message
+Chat -> DB: Store encrypted message
+
+alt Real-time Notification
+  Chat -> Notif: Trigger new message
+  Notif -> D: Push notification
+  D -> UI: Buka aplikasi
+  UI -> Chat: Load new messages
+  Chat -> DB: Get latest messages
+  DB --> Chat: New message data
+  Chat --> UI: Display message
+  D -> UI: Balas pesan
+  UI -> Chat: Send encrypted reply
+  Chat -> DB: Store reply
+  Chat -> Notif: Trigger reply notification
+  Notif -> M: Push notification reply
+end
+
+' ============ PAYMENT SEQUENCE ============
+M -> UI: Akses menu pembayaran
+UI -> Pay: Request UKT data
+Pay -> DB: Get payment information
+DB --> Pay: Payment details
+Pay --> UI: Display payment options
+M -> UI: Pilih metode bayar
+UI -> Pay: Process payment
+Pay -> Ext: Connect to payment gateway
+Ext --> Pay: Payment processed
+Pay -> DB: Update payment status
+Pay -> Notif: Send payment confirmation
+Notif --> M: Payment success notification
+
+' ============ INFORMATION UPDATE SEQUENCE ============
+par Admin Activities
+  Admin -> UI: Publish new information
+  UI -> Info: Submit new content
+  Info -> DB: Store information
+  Info -> Notif: Broadcast notification
+  Notif -> M: New info alert
+  Notif -> D: New info alert
+end
+
+' ============ SECURITY & MONITORING ============
+Auth -> DB: Log user activity
+Chat -> DB: Audit message transactions
+Pay -> DB: Log payment transactions
+
+note right of Chat
+  🔒 **End-to-End Encryption**
+  - Pesan dienkripsi sebelum disimpan
+  - Hanya sender & receiver bisa baca
+  - Audit trail tanpa expose content
+end note
+
+note left of Pay
+  💳 **Secure Payment Flow**
+  - Tokenization untuk data sensitif
+  - Real-time status update
+  - Automatic confirmation
+end note
+
+@enduml

@@ -1,0 +1,11 @@
+@startuml usecase
+
+left to right direction
+
+actor "mahasiswa" as U
+
+U --> (cari buku)
+(cari buku) <|-- (pinjam buku) : extends
+(pinjam buku) --> (login) : include
+
+@enduml 

@@ -1,0 +1,22 @@
+@startuml Status Pembayaran
+!theme plain
+
+title "Status Pembayaran UKT\n🔄 Tracking Real-Time"
+
+[*] -> Menunggu : Tagihan dibuat
+
+state Menunggu : Tagihan aktif\nTunggu pembayaran
+
+Menunggu -> Diproses : Mahasiswa bayar
+state Diproses : Validasi pembayaran\nProses oleh bank
+
+Diproses -> Berhasil : Pembayaran dikonfirmasi
+state Berhasil : UKT lunas\nReceipt generated
+
+Diproses -> Gagal : Pembayaran ditolak
+state Gagal : Transaksi gagal\nPeriksa metode bayar
+
+Gagal -> Menunggu : Coba bayar lagi
+Berhasil -> [*] : Selesai
+
+@enduml

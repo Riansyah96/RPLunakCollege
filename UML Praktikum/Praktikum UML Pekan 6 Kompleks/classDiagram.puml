@@ -1,0 +1,67 @@
+@startuml classDiagram
+!theme plain
+
+title "Class Diagram - Sistem Peminjaman Buku\n🏛️ Struktur Data Sistem"
+
+class User {
+  - id_user : String
+  - nama : String
+  - nim : String
+  - password : String
+  - status : String
+  + login() : Boolean
+  + cariBuku() : List<Buku>
+  + pinjamBuku() : Boolean
+  + lihatRiwayat() : List<Peminjaman>
+}
+
+class Buku {
+  - id_buku : String
+  - judul : String
+  - penulis : String
+  - penerbit : String
+  - tahun_terbit : Integer
+  - status : String
+  + tampilkanInfo() : String
+  + cekKetersediaan() : Boolean
+}
+
+class Peminjaman {
+  - id_peminjaman : String
+  - tanggal_pinjam : Date
+  - tanggal_kembali : Date
+  - status : String
+  + buatPeminjaman() : Boolean
+  + perpanjangWaktu() : Boolean
+  + hitungDenda() : Double
+}
+
+class Admin {
+  - id_admin : String
+  - username : String
+  - password : String
+  + tambahBuku() : Boolean
+  + hapusBuku() : Boolean
+  + updateStatus() : Boolean
+}
+
+' Relasi antar kelas
+User "1" -- "0..*" Peminjaman : melakukan >
+Peminjaman "1" -- "1" Buku : meminjam >
+Admin "1" -- "0..*" Buku : mengelola >
+
+note top of User
+  **Class User** mewakili mahasiswa
+  - Atribut private (-)
+  - Method public (+)
+  - Satu user bisa banyak peminjaman
+end note
+
+note right of Buku
+  **Class Buku** 
+  - Status: TERSEDIA/DIPINJAM
+  - Satu buku hanya bisa dipinjam
+    oleh satu user pada satu waktu
+end note
+
+@enduml

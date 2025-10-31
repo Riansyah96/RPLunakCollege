@@ -1,0 +1,49 @@
+@startuml Use Case Utama
+!theme plain
+
+title "Use Case NF Student Hub\n🎯 Fungsi Utama Platform"
+
+left to right direction
+
+actor Mahasiswa as M
+actor Dosen as D
+actor Admin as A
+
+rectangle "Platform NF Student Hub" {
+  (Login dengan Email Kampus) as UC1
+  (Chat Aman dengan Dosen) as UC2
+  (Lihat Informasi Kampus) as UC3
+  (Bayar UKT Online) as UC4
+  (Terima Notifikasi) as UC5
+  (Lihat Dashboard Personal) as UC6
+  (Monitor Aktivitas) as UC7
+}
+
+' Hubungan actor-use case
+M --> UC1
+M --> UC2
+M --> UC3
+M --> UC4
+M --> UC5
+M --> UC6
+
+D --> UC1
+D --> UC2
+D --> UC3
+D --> UC5
+
+A --> UC1
+A --> UC7
+
+' Include relationships
+UC2 .> UC5 : <<include>>
+UC3 .> UC5 : <<include>>
+UC4 .> UC5 : <<include>>
+
+note bottom of UC2
+  🔒 Fitur unggulan
+  Chat end-to-end encrypted
+  untuk privasi maksimal
+end note
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml Pemabayaran UKT
+!theme plain
+
+title "Alur Pembayaran UKT Terintegrasi\n💰 Pembayaran Satu Pintu"
+
+start
+
+:Mahasiswa login;
+:Akses menu 'Pembayaran UKT';
+
+if (Tagihan tersedia?) then (Ya)
+  :Tampilkan detail tagihan:
+  - Jumlah
+  - Tenggat waktu
+  - Metode bayar;
+  
+  :Pilih metode pembayaran;
+  if (Bank Transfer?) then (Ya)
+    :Redirect ke portal bank;
+  else (E-Wallet?)
+    :Tampilkan QR Code;
+  endif
+  
+  :Konfirmasi pembayaran;
+  if (Pembayaran sukses?) then (Ya)
+    :Update status di database;
+    :Kirim email konfirmasi;
+    :Tampilkan receipt;
+    stop
+  else (Gagal)
+    :Tampilkan pesan error;
+    :Coba metode lain?;
+  endif
+  
+else (Tidak)
+  :Tampilkan "Tidak ada tagihan";
+  stop
+endif
+
+@enduml

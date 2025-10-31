@@ -1,0 +1,90 @@
+@startuml Diagram Activity
+!theme plain
+
+title "Activity Diagram - NF Student Hub\n🔄 Alur Penggunaan Lengkap Sistem"
+
+start
+
+:User mengakses platform;
+:Input email kampus & password;
+
+if (Autentikasi berhasil?) then (Ya)
+  if (Role = Mahasiswa?) then (Ya)
+    :Tampilkan Dashboard Mahasiswa;
+    
+    partition "Fitur Mahasiswa" {
+      :Pilih menu yang diinginkan;
+      
+      if (Menu = Informasi?) then (Ya)
+        :Tampilkan informasi terpusat;
+        :Filter by kategori;
+        :Baca detail informasi;
+        
+      else if (Menu = Chat?) then (Ya)
+        :Pilih dosen tujuan;
+        :Tulis pesan encrypted;
+        :Kirim pesan real-time;
+        :Tunggu balasan;
+        
+      else if (Menu = Pembayaran?) then (Ya)
+        :Cek tagihan UKT;
+        :Pilih metode pembayaran;
+        :Proses pembayaran;
+        if (Pembayaran sukses?) then (Ya)
+          :Update status UKT;
+          :Kirim konfirmasi;
+        else (Gagal)
+          :Tampilkan error;
+        endif
+        
+      else (Menu = Notifikasi)
+        :Baca notifikasi terbaru;
+        :Mark as read;
+      endif
+    }
+    
+  else if (Role = Dosen?) then (Ya)
+    :Tampilkan Dashboard Dosen;
+    
+    partition "Fitur Dosen" {
+      :Baca chat dari mahasiswa;
+      :Balas pesan encrypted;
+      :Lihat jadwal mengajar;
+    }
+    
+  else (Role = Admin)
+    :Tampilkan Admin Dashboard;
+    
+    partition "Fitur Admin" {
+      :Monitor aktivitas sistem;
+      :Kelola informasi kampus;
+      :Kelola user accounts;
+      :Analytics & reporting;
+    }
+  endif
+  
+  :Logout dari sistem;
+  stop
+  
+else (Tidak)
+  :Tampilkan error autentikasi;
+  :Kembali ke halaman login;
+endif
+
+' ============ PARALLEL PROCESSES ============
+partition "Background Processes" {
+  :Sinkronisasi data dengan SISKA;
+  :Push notification service;
+  :Security monitoring;
+  :Data backup & encryption;
+}
+
+note right
+  🔄 **Real-time Features:**
+  - Chat real-time dengan WebSocket
+  - Auto-sync dengan sistem kampus
+  - Instant notification delivery
+  - Live activity monitoring
+end note
+
+@enduml

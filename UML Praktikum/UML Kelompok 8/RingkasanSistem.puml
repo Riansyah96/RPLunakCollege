@@ -1,0 +1,59 @@
+@startuml Ringkasan Sistem
+!theme plain
+
+title "NF Student Hub - Arsitektur Sistem\n📚 Platform Kampus Pintar"
+
+actor "Mahasiswa" as Student
+actor "Dosen" as Lecturer
+actor "Admin" as Admin
+
+package "Platform NF Student Hub" {
+  [Portal Web] as Portal
+  [Aplikasi Mobile] as Mobile
+  
+  package "Layanan Inti" {
+    [Layanan\nAutentikasi] as Auth
+    [Layanan Chat\nAman] as Chat
+    [Pusat Informasi] as Info
+    [Layanan\nPembayaran] as Payment
+    [Layanan\nNotifikasi] as Notify
+  }
+  
+  database "Database\nPusat" as DB
+}
+
+[Email Kampus] as Email
+[Gateway Pembayaran] as Bank
+[Sistem SISKA] as SISKA
+
+' Alur Mahasiswa
+Student --> Portal : Akses Platform
+Student --> Mobile : Akses Mobile
+
+' Alur Dosen  
+Lecturer --> Portal : Portal Pengajaran
+
+' Alur Admin
+Admin --> Portal : Dashboard Admin
+
+' Koneksi internal
+Portal --> Auth : Permintaan Login
+Mobile --> Auth : Login Mobile
+Auth --> Email : Verifikasi Email Kampus
+
+Portal --> Chat : Mulai Chat
+Mobile --> Chat : Chat Mobile
+Chat --> DB : Simpan Pesan
+
+Portal --> Info : Baca Informasi
+Info --> DB : Ambil Data
+Info --> SISKA : Sinkronisasi Data
+
+Portal --> Payment : Bayar UKT
+Payment --> Bank : Proses Pembayaran
+Payment --> DB : Catat Transaksi
+
+Notify --> Student : Kirim Notifikasi
+Notify --> Lecturer : Notifikasi Dosen
+
+@enduml

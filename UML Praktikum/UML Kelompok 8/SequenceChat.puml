@@ -1,0 +1,39 @@
+@startuml Chat
+!theme plain
+
+title "Alur Chat Real-Time Aman\n💬 Komunikasi Dosen-Mahasiswa"
+
+actor "Mahasiswa" as M
+participant "Aplikasi" as App
+participant "Server Chat" as Server
+participant "Database" as DB
+actor "Dosen" as D
+
+M -> App: Login sukses
+App -> Server: Koneksi WebSocket
+Server --> App: Koneksi established
+
+M -> App: Ketik pesan ke dosen
+App -> Server: Kirim pesan (encrypted)
+Server -> DB: Simpan pesan encrypted
+Server -> D: Push notifikasi real-time
+
+D -> App: Buka aplikasi
+App -> Server: Minta history chat
+Server -> DB: Ambil pesan encrypted
+DB --> Server: Data encrypted
+Server --> App: Kirim pesan decrypted
+App --> D: Tampilkan percakapan
+
+D -> App: Balas pesan
+App -> Server: Kirim balasan (encrypted)
+Server -> DB: Simpan balasan
+Server -> M: Notifikasi balasan
+
+note right of Server
+  🔒 End-to-End Encryption
+  Setiap pesan dienkripsi
+  sebelum dikirim
+end note
+
+@enduml
